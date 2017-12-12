@@ -21,7 +21,7 @@ class Log:
     @property
     def http_code(self):
         if self.log.split(']')[1].split()[2].split('/')[0] == 'HTTP':
-            return int(self.log.split(']')[1].split()[-2])
+            return self.log.split(']')[1].split()[-2]
 
     @property
     def request_bytes(self):
@@ -38,7 +38,7 @@ class LogAnalyzer:
     def aggregate_bytes(self):
         for raw_log in self.file:
             log = Log(raw_log)
-            if log.http_code == 200:
+            if len(log.http_code) == 3 and log.http_code.startswith('2'):
                 self.agg_bytes[log.request_content] += log.request_bytes
                 self.counter.update([log.request_content])
     
